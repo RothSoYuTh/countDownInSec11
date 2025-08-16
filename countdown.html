@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CountDown</title>
+</head>
+<body>
+   <div style="text-align: center; margin: 10px;">
+    <h3>Countdown</h3>
+    <h4 id="timeDisplay">00:00</h4>
+    <input type="number" id="timeInput" placeholder="Input time" style="text-align: center;">
+    <br><br>
+    <button onclick="start()">start</button>
+    <button onclick="stop()">stop</button>
+    <button onclick="reset()">reset</button>
+   </div>
+
+   <script>
+    let countdown;          // For setInterval
+    let remainingTime = 0;  // Seconds left
+    let initialTime = 0;    // Original time for reset
+
+    function updateDisplay() {
+        let minutes = String(Math.floor(remainingTime / 60)).padStart(2, '0');
+        let seconds = String(remainingTime % 60).padStart(2, '0');
+        document.getElementById("timeDisplay").textContent = `${minutes}:${seconds}`;
+    }
+
+    function start() {
+        let inputVal = document.getElementById("timeInput").value;
+        if (inputVal && initialTime === 0) {
+            initialTime = parseInt(inputVal);
+            remainingTime = initialTime;
+            updateDisplay();
+        }
+        
+        clearInterval(countdown); // Avoid multiple timers
+        countdown = setInterval(() => {
+            if (remainingTime > 0) {
+                remainingTime--;
+                updateDisplay();
+            } else {
+                clearInterval(countdown);
+                alert("Time's up!");
+            }
+        }, 1000);
+    }
+
+    function stop() {
+        clearInterval(countdown);
+    }
+
+    function reset() {
+        clearInterval(countdown);
+        remainingTime = 0;
+        initialTime = 0;
+        document.getElementById("timeInput").value = "";
+        document.getElementById("timeDisplay").textContent = "00:00";
+    }
+   </script>
+</body>
+</html>
